@@ -78,6 +78,7 @@ CORS(
     origins=[
         "https://cohendacool.github.io",
         "https://tev-web.onrender.com",
+        "https://staging.d3j0llm8tu6dg3.amplifyapp.com/",
         "http://127.0.0.1:5500",
         "http://localhost:5500"
     ]
