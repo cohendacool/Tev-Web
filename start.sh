@@ -26,6 +26,9 @@ fi
 echo "Downloading model if needed..."
 ollama pull qwen2.5:0.5b
 
+echo "Warming up model..."
+curl -fsS http://127.0.0.1:11434/api/generate -d '{"model": "qwen2.5:0.5b", "prompt": "hi", "stream": false}' >/dev/null || true
+
 echo "Starting Tev API..."
 gunicorn --bind "0.0.0.0:${PORT:-10000}" \
     --workers 1 \
