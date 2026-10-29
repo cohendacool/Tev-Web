@@ -1,6 +1,5 @@
 import os
 import sys
-import secrets
 from datetime import timedelta
 from pathlib import Path
 
@@ -34,7 +33,9 @@ client = OpenAI(
 )
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError("FLASK_SECRET_KEY is missing.")
 app.permanent_session_lifetime = timedelta(days=30)
 
 app.config.update(
@@ -43,7 +44,11 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="None" if IS_RENDER else "Lax"
 )
 
-CORS(app, supports_credentials=True, origins="*")
+CORS(
+    app,
+    supports_credentials=True,
+    origins=[os.getenv("FRONTEND_ORIGIN", "http://localhost:5500")]
+)
 
 db.setup()
 app.register_blueprint(auth)
@@ -93,7 +98,7 @@ def call_function():
         try:
             stream = client.chat.completions.create(
                 messages=messages,
-                model="qwen2.5:1.5b",
+                model="qwen2.5:0.5b",
                 temperature=0.7,
                 max_tokens=4096,
                 stream=True
