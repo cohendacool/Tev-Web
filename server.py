@@ -47,7 +47,7 @@ app.config.update(
 CORS(
     app,
     supports_credentials=True,
-    origins=["https://cohendacool.github.io/Tev-Web"]
+    origins=["https://cohendacool.github.io"]
 )
 
 db.setup()
