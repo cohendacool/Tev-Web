@@ -19,7 +19,7 @@ import db
 from auth import auth
 from chats import chats
 
-IS_RENDER = os.getenv("RENDER") == "true"
+IS_RENDER = os.getenv("RENDER_SERVICE_ID") is not None
 MAX_HISTORY = 10
 
 personality = (
