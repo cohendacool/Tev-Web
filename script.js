@@ -3,8 +3,8 @@ let loadedMessages = 0;
 let currentChatId = null;
 let isSending = false;
 
-const api_url = "https://tev-web.onrender.com";
-const auth_url = "https://tev-web.onrender.com";
+const api_url = "http://10.0.0.198:5000";
+const auth_url = "http://10.0.0.198:5000";
 
 function prechatMessages() {
     return [
@@ -131,6 +131,7 @@ function loadMain(name) {
 async function checkSavedSession() {
     try {
         const response = await fetch(`${auth_url}/session`, {
+            method: "GET",
             credentials: "include"
         });
 
