@@ -1,4 +1,5 @@
 import os
+import secrets
 import sys
 from datetime import timedelta
 from pathlib import Path
@@ -19,7 +20,6 @@ import db
 from auth import auth
 from chats import chats
 
-IS_RENDER = os.getenv("RENDER_SERVICE_ID") is not None
 MAX_HISTORY = 10
 
 personality = (
@@ -33,15 +33,13 @@ client = OpenAI(
 )
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-if not app.secret_key:
-    raise RuntimeError("FLASK_SECRET_KEY is missing.")
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
 app.permanent_session_lifetime = timedelta(days=30)
 
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SECURE=IS_RENDER,
-    SESSION_COOKIE_SAMESITE="None" if IS_RENDER else "Lax"
+    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_SAMESITE="Lax"
 )
 
 CORS(
@@ -121,4 +119,4 @@ def call_function():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
